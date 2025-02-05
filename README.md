@@ -4,7 +4,7 @@ A sophisticated web-based steganography platform using Python and Django, enabli
 
 ## Features
 
-- Multiple file format support (PNG, JPG, MP4, MP3, PDF)
+- Multiple file format support (PNG, JPG, MP4, MP3, PDF, DOCX)
 - Secure file upload and processing
 - User authentication and management
 - API endpoints for integration
@@ -15,7 +15,7 @@ A sophisticated web-based steganography platform using Python and Django, enabli
 
 - Python 3.9+
 - Django 4.1
-- PostgreSQL
+- SQLite (can be replaced by PostgreSQL for production purpose)
 - Celery for background tasks
 - Redis for caching
 - Bootstrap for frontend
@@ -25,7 +25,7 @@ A sophisticated web-based steganography platform using Python and Django, enabli
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd kalinga_project
+cd Steganography_Webapp
 ```
 
 2. Set up virtual environment:
@@ -41,6 +41,7 @@ pip install -r requirements/dev.txt
 ```
 
 4. Configure database in .env:
+   (if PostgreSQL is used)
 ```
 DATABASE_URL=postgresql://user:password@localhost:5432/steganography_db
 ```
@@ -58,7 +59,6 @@ python manage.py runserver
 ## Documentation
 
 - [API Documentation](docs/API.md)
-- [Architecture](docs/ARCHITECTURE.md)
 - [Setup Guide](docs/SETUP.md)
 - [Security](docs/SECURITY.md)
 
