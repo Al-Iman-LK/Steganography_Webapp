@@ -1,0 +1,38 @@
+# Core Django
+Django==4.1
+djangorestframework==3.14.0
+django-cleanup==7.0.0
+
+# Image Processing
+Pillow==9.5.0
+numpy<2.0.0,>=1.24.3  # Ensuring compatibility
+opencv-python==4.8.0.74  # For video frame processing
+
+# File Type Detection
+python-magic==0.4.27
+python-magic-bin==0.4.14; sys_platform == 'win32'
+
+# Security
+django-cors-headers==4.0.0
+djangorestframework-simplejwt==5.2.2
+cryptography==40.0.2
+
+# Background Tasks
+celery==5.2.7
+redis==4.5.4
+
+# Storage
+django-storages==1.13.2
+
+# Document Processing
+PyPDF2==3.0.1
+python-docx==0.8.11
+
+# Audio Processing
+wave==0.0.2  # Part of Python standard library
+pydub==0.25.1  # Required for MP3 conversion
+
+# Removed:
+# - ffmpeg-python (not needed anymore)
+# - moviepy (not needed anymore)
+# - soundfile (using wave module instead)

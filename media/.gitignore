@@ -1,0 +1,7 @@
+# Ignore all files in uploads and processed directories
+uploads/*
+processed/*
+
+# Except the .gitkeep files
+!uploads/.gitkeep
+!processed/.gitkeep

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}My Files{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col d-flex justify-content-between align-items-center">
+            <h2>My Files</h2>
+            <div>
+                <a href="{% url 'core:upload_file' %}" class="btn btn-primary">Upload New File</a>
+                {% if files %}
+                    <a href="{% url 'core:clear_history' %}" class="btn btn-danger ms-2">Clear History</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {% if files %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Extraction Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for file in files %}
+                            <tr>
+                                <td>{{ file.original_file.name }}</td>
+                                <td>{{ file.get_file_type_display }}</td>
+                                <td>
+                                    <span class="badge bg-{{ file.status }}">
+                                        {{ file.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ file.extraction_status }}">
+                                        {{ file.get_extraction_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if file.status == 'pending' %}
+                                        <a href="{% url 'core:process_file' file.id %}" 
+                                           class="btn btn-sm btn-primary">
+                                            Embed Message
+                                        </a>
+                                    {% endif %}
+                                    
+                                    {% if file.status == 'completed' %}
+                                        <a href="{% url 'core:extract_message' file.id %}" 
+                                           class="btn btn-sm btn-success">
+                                            Extract Message
+                                        </a>
+                                        {% if file.extracted_message %}
+                                            <button class="btn btn-sm btn-info" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#messageModal{{ file.id }}">
+                                                View Message
+                                            </button>
+                                        {% endif %}
+                                        {% if file.processed_file %}
+                                            <a href="{{ file.processed_file.url }}" class="btn btn-info btn-sm" download>
+                                                Download
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            
+                            {% if file.extracted_message %}
+                            <!-- Message Modal -->
+                            <div class="modal fade" id="messageModal{{ file.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Extracted Message</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>{{ file.extracted_message }}</p>
+                                            <small class="text-muted">
+                                                Extracted on: {{ file.extraction_date }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    No files uploaded yet. 
+                    <a href="{% url 'core:upload_file' %}">Upload your first file</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-pending { background-color: #ffc107; }
+    .bg-processing { background-color: #17a2b8; }
+    .bg-completed { background-color: #28a745; }
+    .bg-failed { background-color: #dc3545; }
+</style>
+{% endblock %}

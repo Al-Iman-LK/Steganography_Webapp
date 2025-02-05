@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upload File{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Upload File for Steganography</h3>
+            </div>
+            <div class="card-body">
+                <form id="upload-form" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="upload-area" id="upload-area">
+                        <p>Drag and drop your file here or</p>
+                        <input type="file" id="file-input" name="original_file" class="form-control" required>
+                        <p class="mt-2" id="selected-file"></p>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="file_type">File Type</label>
+                        <select name="file_type" id="file_type" class="form-control" required>
+                            <option value="image">Image</option>
+                            <option value="video">Video</option>
+                            <option value="audio">Audio</option>
+                            <option value="document">Document</option>
+                        </select>
+                    </div>
+                    <div class="form-check mt-3">
+                        <input type="checkbox" name="auto_delete" id="auto_delete" class="form-check-input">
+                        <label class="form-check-label" for="auto_delete">
+                            Automatically delete after processing
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/upload.js' %}"></script>
+{% endblock %}

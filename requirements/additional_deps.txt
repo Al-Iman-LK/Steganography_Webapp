@@ -1,0 +1,12 @@
+# Document Processing
+PyPDF2==3.0.1
+python-docx==0.8.11
+
+# Audio Processing
+wave==0.0.2
+
+# Video Processing
+opencv-python==4.7.0
+
+# Additional required
+numpy==1.24.3  # If not already installed

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Clear File History{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3 class="card-title">Clear File History</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <h4 class="alert-heading">Warning!</h4>
+                    <p>You are about to delete all your file history. This includes:</p>
+                    <ul>
+                        <li>Original uploaded files</li>
+                        <li>Processed files</li>
+                        <li>Embedded messages</li>
+                        <li>Extraction history</li>
+                    </ul>
+                    <p>This action cannot be undone.</p>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'core:file_list' %}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-danger">Clear All History</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

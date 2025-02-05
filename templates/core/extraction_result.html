@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Extraction Result{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Extracted Message</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6>File Details:</h6>
+                    <p>Name: {{ file.original_file.name }}</p>
+                    <p>Type: {{ file.get_file_type_display }}</p>
+                </div>
+                
+                <div class="alert alert-success">
+                    <h5 class="alert-heading">Hidden Message:</h5>
+                    <p class="mb-0">{{ extracted_message }}</p>
+                </div>
+
+                <div class="mt-4">
+                    <a href="{% url 'core:upload_for_extraction' %}" class="btn btn-primary">Extract Another File</a>
+                    <a href="{% url 'core:file_list' %}" class="btn btn-secondary ms-2">View All Files</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

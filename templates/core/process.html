@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Process File{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Process File</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <p>File: {{ file.original_file.name }}</p>
+                    <p>Type: {{ file.get_file_type_display }}</p>
+                    <p>Status: <span id="status" class="status-badge status-{{ file.status }}">{{ file.status }}</span></p>
+                </div>
+                <form id="message-form" data-file-id="{{ file.id }}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="message">Message to Hide</label>
+                        <textarea name="message" id="message" class="form-control" required></textarea>
+                        <div id="error-message" class="text-danger mt-2"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Process</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/processing.js' %}"></script>
+{% endblock %}

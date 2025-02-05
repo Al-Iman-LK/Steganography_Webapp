@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upload for Extraction{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Upload File for Message Extraction</h3>
+            </div>
+            <div class="card-body">
+                <form id="upload-form" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- Add hidden field to indicate this is for extraction -->
+                    <input type="hidden" name="for_extraction" value="true">
+                    <div class="alert alert-info">
+                        <p>Upload a file that already contains a hidden message to extract its contents.</p>
+                    </div>
+                    <div class="upload-area" id="upload-area">
+                        <input type="file" id="file-input" name="original_file" class="form-control" required>
+                        <p class="mt-2" id="selected-file"></p>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="file_type">File Type</label>
+                        <select name="file_type" id="file_type" class="form-control" required>
+                            <option value="image">Image</option>
+                            <option value="video">Video</option>
+                            <option value="audio">Audio</option>
+                            <option value="document">Document</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Upload & Extract</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('upload-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    // First upload the file
+    fetch('/api/files/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Immediately request extraction
+        return fetch(`/api/files/${data.id}/extract/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json'
+            }
+        });
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Replace the form with the extracted message
+            const container = document.querySelector('.card-body');
+            container.innerHTML = `
+                <div class="alert alert-success">
+                    <h4 class="alert-heading">Message Successfully Extracted!</h4>
+                </div>
+                <div class="mt-4">
+                    <h5>Extracted Message:</h5>
+                    <div class="alert alert-info">
+                        ${data.message}
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'core:upload_for_extraction' %}" class="btn btn-primary">Extract Another File</a>
+                    <a href="{% url 'core:file_list' %}" class="btn btn-secondary ms-2">View All Files</a>
+                </div>
+            `;
+        } else {
+            throw new Error(data.error || 'Extraction failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Extraction failed: ' + error.message);
+    });
+});
+</script>
+{% endblock %}
